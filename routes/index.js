@@ -1,6 +1,6 @@
 import express from 'express';
 import superheroesRouter from './superheroes.js';
-import * as superheroesController from '../controllers/SuperheroesController.js';
+import superheroesController from '../controllers/SuperheroesController.js';
 
 const router = express.Router();
 

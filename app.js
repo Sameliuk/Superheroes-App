@@ -4,8 +4,10 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import logger from 'morgan';
 import cors from 'cors';
-import indexRouter from './routes/index.js';
 import { fileURLToPath } from 'url';
+
+// підключаємо indexRouter замість superheroesRouter
+import indexRouter from './routes/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
