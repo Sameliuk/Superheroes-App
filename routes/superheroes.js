@@ -1,5 +1,5 @@
-const express = require('express');
-const superheroesController = require('../controllers/SuperheroesController');
+import express from 'express';
+import * as superheroesController from '../controllers/SuperheroesController.js';
 
 const router = express.Router();
 
@@ -8,4 +8,4 @@ router.get('/:superheroId', superheroesController.getSingleSuperhero);
 router.put('/:superheroId', superheroesController.updateSuperhero);
 router.delete('/:superheroId', superheroesController.deleteSuperhero);
 
-module.exports = router;
+export default router;

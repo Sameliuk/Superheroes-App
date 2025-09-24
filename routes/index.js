@@ -1,10 +1,10 @@
-const express = require('express');
-const superheroesRouter = require('./superheroes');
-const superheroesController = require('../controllers/SuperheroesController');
+import express from 'express';
+import superheroesRouter from './superheroes.js';
+import * as superheroesController from '../controllers/SuperheroesController.js';
 
 const router = express.Router();
 
 router.use('/superheroes', superheroesRouter);
 router.get('/', superheroesController.getAllSuperheroes);
 
-module.exports = router;
+export default router;
