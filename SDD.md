@@ -6,7 +6,6 @@ Users:
 - sname
 - email
 - password
-- role
 
 Superheroes:
 - id
