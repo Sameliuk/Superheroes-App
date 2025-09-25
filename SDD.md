@@ -19,10 +19,6 @@ Superheroes:
 Images:
 - id
 - url
-
-Gallary:
-- id
-- image_id
 - superhero_id
 
 Favourites:
@@ -31,7 +27,11 @@ Favourites:
 - superhero_id
 
 Зв'язки між сутностями(ER-діаграма):
-<img width="957" height="591" alt="node_lab_02 drawio" src="https://github.com/user-attachments/assets/c0c6a14d-7b58-4f2e-bb55-b539d4273215" />
+<img width="968" height="601" alt="node_lab_02 drawio" src="https://github.com/user-attachments/assets/f48b4016-2f11-43c8-a307-88ff8cb28a6f" />
+<img width="1081" height="567" alt="ER-diagram_node" src="https://github.com/user-attachments/assets/1adde15a-b95c-4868-93ee-3008325a7375" />
+
+
+
 
 ## 2. Компоненти бекенду
 (опис модулів, їхня роль + діаграма компонентів)
