@@ -5,6 +5,9 @@ import session from 'express-session';
 import logger from 'morgan';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // підключаємо indexRouter замість superheroesRouter
 import indexRouter from './routes/index.js';
@@ -30,10 +33,10 @@ app.use(
 // Сесії
 app.use(
   session({
-    secret: 'jwpe34',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { secure: false }, // або true на продакшн з HTTPS
   }),
 );
 
