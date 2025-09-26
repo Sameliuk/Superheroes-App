@@ -3,8 +3,8 @@ import UserService from '../services/UserService.js';
 class UserController {
   async signUp(req, res) {
     try {
-      const newUser = await UserService.registerUser(req.body);
-      res.status(201).json({ user: newUser });
+      const newUserWithToken = await UserService.registerUser(req.body);
+      res.status(201).json(newUserWithToken);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
