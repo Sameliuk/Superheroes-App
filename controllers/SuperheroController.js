@@ -42,7 +42,7 @@ class SuperheroController {
 
   async createSuperhero(req, res) {
     try {
-      const userId = req.user?.id || 1; // тимчасово, доки не підключена автентифікація
+      const userId = req.user?.id || 1;
       const hero = await SuperheroesService.createSuperhero(userId, req.body);
       res.status(201).json(hero);
     } catch (err) {
@@ -52,7 +52,7 @@ class SuperheroController {
 
   async updateSuperhero(req, res) {
     try {
-      const userId = req.user?.id || 1;
+      const userId = req.user?.id;
       const hero = await SuperheroesService.updateSuperhero(
         userId,
         req.params.superheroId,
