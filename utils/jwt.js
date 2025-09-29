@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const SECRET = process.env.JWT_SECRET || 'your_default_secret';
+const SECRET = process.env.JWT_SECRET;
 
 export function generateToken(user) {
   return jwt.sign(
@@ -11,7 +11,7 @@ export function generateToken(user) {
       email: user.email,
     },
     SECRET,
-    { expiresIn: '1h' }, // токен дійсний 1 годину
+    { expiresIn: '1h' },
   );
 }
 

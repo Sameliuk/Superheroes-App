@@ -13,10 +13,11 @@ router.post(
   userController.logOut.bind(userController),
 );
 
-router.get('/:userId/favorites', favoritesController.getFavorites);
-router.post('/:userId/favorites', favoritesController.addFavorite);
+router.get('/favorites', authMiddleware, favoritesController.getFavorites);
+router.post('/favorites', authMiddleware, favoritesController.addFavorite);
 router.delete(
-  '/:userId/favorites/:superheroId',
+  '/favorites/:superheroId',
+  authMiddleware,
   favoritesController.removeFavorite,
 );
 
