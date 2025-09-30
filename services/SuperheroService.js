@@ -35,18 +35,6 @@ class SuperheroesService {
     return { page, totalPages, data: superheroes };
   }
 
-  async searchSuperheroes(query) {
-    return Superheroes.findAll({
-      where: {
-        [Op.or]: [
-          { nickname: { [Op.iLike]: `%${query}%` } },
-          { real_name: { [Op.iLike]: `%${query}%` } },
-        ],
-      },
-      include: { model: Images, as: 'images', attributes: ['id', 'url'] },
-    });
-  }
-
   async createSuperhero(userId, heroData) {
     const {
       nickname,

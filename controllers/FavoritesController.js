@@ -3,7 +3,7 @@ import FavoriteService from '../services/FavoriteService.js';
 class FavoriteController {
   async getFavorites(req, res) {
     try {
-      const userId = req.user.id; // беремо з токена
+      const userId = req.user.id;
       const favorites = await FavoriteService.getFavoriteSuperheroes(userId);
       if (!favorites) return res.status(404).json({ error: 'User not found' });
       res.json(favorites);
@@ -14,7 +14,7 @@ class FavoriteController {
 
   async addFavorite(req, res) {
     try {
-      const userId = req.user.id; // беремо з токена
+      const userId = req.user.id;
       const { superheroId } = req.body;
       const result = await FavoriteService.addToFavorites(userId, superheroId);
       if (!result)
@@ -27,7 +27,7 @@ class FavoriteController {
 
   async removeFavorite(req, res) {
     try {
-      const userId = req.user.id; // беремо з токена
+      const userId = req.user.id;
       const { superheroId } = req.params;
       const success = await FavoriteService.removeFromFavorites(
         userId,
