@@ -26,7 +26,7 @@ Favourites:
 - superhero_id
 
 Зв'язки між сутностями(ER-діаграма):
-<img width="967" height="601" alt="node_lab_02 drawio" src="https://github.com/user-attachments/assets/b6763347-d1c9-4ffd-aae5-f908ecff7c9c" />
+<img width="967" height="601" alt="node_lab_02 drawio (1)" src="https://github.com/user-attachments/assets/52bdc322-4253-4ee1-b976-07953c5df18b" />
 <img width="1081" height="567" alt="ER-diagram_node" src="https://github.com/user-attachments/assets/1adde15a-b95c-4868-93ee-3008325a7375" />
 
 ## 2. Компоненти
