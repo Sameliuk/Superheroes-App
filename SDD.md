@@ -26,13 +26,14 @@ Favourites:
 - superhero_id
 
 Зв'язки між сутностями(ER-діаграма):
-<img width="967" height="601" alt="node_lab_02 drawio (1)" src="https://github.com/user-attachments/assets/52bdc322-4253-4ee1-b976-07953c5df18b" />
+<img width="961" height="481" alt="node_lab_02 drawio (2)" src="https://github.com/user-attachments/assets/d331c007-422f-489d-a87f-855bd91fb3eb" />
 <img width="1081" height="567" alt="ER-diagram_node" src="https://github.com/user-attachments/assets/1adde15a-b95c-4868-93ee-3008325a7375" />
 
 ## 2. Компоненти
 
 Діаграма компонентів:
-<img width="2607" height="762" alt="ComponentsDiag_node drawio" src="https://github.com/user-attachments/assets/138b7c69-1784-42c8-add2-3d0a33e04399" />
+<img width="3003" height="869" alt="ComponentsDiag_node drawio (1)" src="https://github.com/user-attachments/assets/5627b98c-b05d-44be-aa9f-2496ce2f677a" />
+
 
 ### Router
 - **Файли**: `routes/index.js`, `routes/users.js`, `routes/superheroes.js`
