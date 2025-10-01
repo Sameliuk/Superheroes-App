@@ -12,24 +12,24 @@ class SuperheroesService {
   ) {
     const offset = (page - 1) * limit;
 
-    const whereClause = {};
+    const filters = {};
 
-    if (userId) whereClause.user_id = userId;
+    if (userId) filters.user_id = userId;
     if (searchQuery) {
-      whereClause[Op.or] = [
+      filters[Op.or] = [
         { nickname: { [Op.iLike]: `%${searchQuery}%` } },
         { real_name: { [Op.iLike]: `%${searchQuery}%` } },
       ];
     }
 
     const superheroes = await Superheroes.findAll({
-      where: whereClause,
+      where: filters,
       include: { model: Images, as: 'images', attributes: ['id', 'url'] },
       limit,
       offset,
     });
 
-    const totalCount = await Superheroes.count({ where: whereClause });
+    const totalCount = await Superheroes.count({ where: filters });
     const totalPages = Math.ceil(totalCount / limit);
 
     return { page, totalPages, data: superheroes };
