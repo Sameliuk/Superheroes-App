@@ -8,8 +8,18 @@ export default defineConfig([
     files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     languageOptions: {
-      globals: globals.node,
+      globals: {
+        ...globals.node,
+      },
       sourceType: 'module',
+    },
+  },
+  {
+    files: ['**/*.test.{js,ts}'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
     },
   },
 ]);

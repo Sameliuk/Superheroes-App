@@ -14,6 +14,7 @@ const sequelize = new Sequelize(
   {
     dialect: process.env.DB_DIALECT || 'postgres',
     host: process.env.DB_HOST || 'localhost',
+    logging: false,
   },
 );
 
