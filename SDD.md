@@ -32,7 +32,7 @@ Favourites:
 ## 2. Компоненти
 
 Діаграма компонентів:
-<img width="3165" height="1206" alt="ComponentsDiag_node drawio (2)" src="https://github.com/user-attachments/assets/51f1a842-4e3e-47e4-8f1d-ea9319b9bd39" />
+<img width="3340" height="1206" alt="ComponentsDiag_node drawio (3)" src="https://github.com/user-attachments/assets/36aab4c5-bd31-4089-a44f-ff915b6752dc" />
 
 
 ### Router
