@@ -5,17 +5,24 @@
 Типи тестів:
 
 Модульні (unit)
-![alt text](image.png)
+
+<img width="880" height="227" alt="image" src="https://github.com/user-attachments/assets/8263ce6e-9f77-44ce-895b-319af7c9bda0" />
 
 Інтеграційні
-![alt text](image-1.png)
+
+<img width="885" height="360" alt="image" src="https://github.com/user-attachments/assets/c53aff35-f7b0-4e6b-ac3c-74236043905a" />
 
 End-to-End (E2E)
-![alt text](image-2.png)
+
+<img width="869" height="294" alt="image" src="https://github.com/user-attachments/assets/6c74ead8-c1c9-4eab-9661-3826fedfc023" />
 
 Мутаційне тестування
-![alt text](image-3.png)
-![alt text](image-4.png)
+
+<img width="1412" height="501" alt="image" src="https://github.com/user-attachments/assets/f5e4de61-188c-46e2-a51d-ffefefe2c455" />
+
+<img width="968" height="536" alt="image" src="https://github.com/user-attachments/assets/fd5aa22e-c6e8-4c31-8700-5351bf5643a0" />
+<img width="1022" height="638" alt="image" src="https://github.com/user-attachments/assets/fa753bba-b244-44fb-8086-1ce692f0fc54" />
+
 
 ---
 
