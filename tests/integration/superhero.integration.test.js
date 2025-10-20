@@ -6,10 +6,12 @@ let token;
 let superheroId;
 
 beforeAll(async () => {
+  // Повне пересоздання бази
   await db.sequelize.sync({ force: true });
 });
 
 afterAll(async () => {
+  // Очищення даних і закриття з’єднання
   await db.Favorites.destroy({ where: {} });
   await db.Superheroes.destroy({ where: {} });
   await db.Users.destroy({ where: {} });
@@ -17,7 +19,7 @@ afterAll(async () => {
 });
 
 describe('Users, Superheroes & Favorites API Integration', () => {
-  it('POST /users/signUp - create user', async () => {
+  test('POST /users/signUp - create user', async () => {
     const res = await request(app).post('/users/signUp').send({
       fname: 'UserFname',
       sname: 'UserSname',
@@ -25,25 +27,25 @@ describe('Users, Superheroes & Favorites API Integration', () => {
       password: 'password123',
     });
 
-    expect(res.status).toBe(201);
+    expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('token');
     expect(res.body).toHaveProperty('user.id');
     token = res.body.token;
   });
 
-  it('POST /users/signIn - login user', async () => {
+  test('POST /users/signIn - login user', async () => {
     const res = await request(app).post('/users/signIn').send({
       email: 'user_email@example.com',
       password: 'password123',
     });
 
-    expect(res.status).toBe(200);
+    expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('token');
     expect(res.body).toHaveProperty('user.id');
     token = res.body.token;
   });
 
-  it('POST /superheroes - create superhero', async () => {
+  test('POST /superheroes - create superhero', async () => {
     const res = await request(app)
       .post('/superheroes')
       .set('Authorization', `Bearer ${token}`)
@@ -57,56 +59,57 @@ describe('Users, Superheroes & Favorites API Integration', () => {
         catch_phrase: 'With great power comes great responsibility.',
       });
 
-    expect(res.status).toBe(201);
+    expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('id');
     superheroId = res.body.id;
   });
 
-  it('PUT /superheroes/:id - update superhero', async () => {
+  test('PUT /superheroes/:id - update superhero', async () => {
     const res = await request(app)
       .put(`/superheroes/${superheroId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ catch_phrase: 'Genius, billionaire, playboy, philanthropist' });
 
-    expect(res.status).toBe(200);
+    expect(res.statusCode).toBe(200);
     expect(res.body.catch_phrase).toBe(
       'Genius, billionaire, playboy, philanthropist',
     );
   });
 
-  it('POST /users/favorites - add to favorites', async () => {
+  test('POST /users/favorites - add to favorites', async () => {
     const res = await request(app)
       .post('/users/favorites')
       .set('Authorization', `Bearer ${token}`)
       .send({ superheroId });
-    expect(res.status).toBe(201);
+
+    expect(res.statusCode).toBe(201);
   });
 
-  it('GET /users/favorites - list favorites', async () => {
+  test('GET /users/favorites - list favorites', async () => {
     const res = await request(app)
       .get('/users/favorites')
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.status).toBe(200);
+    expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('favorites');
     expect(res.body.favorites.length).toBeGreaterThan(0);
   });
 
-  it('DELETE /users/favorites/:id - remove favorite', async () => {
+  test('DELETE /users/favorites/:id - remove favorite', async () => {
     const res = await request(app)
       .delete(`/users/favorites/${superheroId}`)
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.status).toBe(200);
+    expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('message', 'Removed from favorites');
   });
 
-  it('DELETE /superheroes/:id - delete superhero', async () => {
+  test('DELETE /superheroes/:id - delete superhero', async () => {
     const res = await request(app)
       .delete(`/superheroes/${superheroId}`)
       .set('Authorization', `Bearer ${token}`);
 
-    expect(res.status).toBe(200);
+    expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('message', 'Superhero deleted');
   });
 });

@@ -24,7 +24,10 @@ app.set('views', path.join(__dirname, 'views'));
 // CORS
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: [
+      'http://localhost:5173',
+      'https://puppyish-renay-tenaciously.ngrok-free.dev',
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   }),

@@ -36,7 +36,7 @@ class SuperheroesService {
   }
 
   async createSuperhero(userId, heroData) {
-    const {
+    let {
       nickname,
       real_name,
       origin_description,
@@ -44,6 +44,26 @@ class SuperheroesService {
       catch_phrase,
       images,
     } = heroData;
+
+    const normalizedNickname = nickname.replace(/\s+/g, '').toLowerCase();
+
+    const existingHero = await Superheroes.findOne({
+      where: {
+        [Op.and]: [
+          db.sequelize.where(
+            db.sequelize.fn(
+              'LOWER',
+              db.sequelize.fn('REPLACE', db.sequelize.col('nickname'), ' ', ''),
+            ),
+            normalizedNickname,
+          ),
+        ],
+      },
+    });
+
+    if (existingHero) {
+      throw new Error('A superhero with this nickname already exists');
+    }
 
     const newHero = await Superheroes.create({
       nickname,

@@ -43,10 +43,24 @@ class SuperheroController {
   async createSuperhero(req, res) {
     try {
       const userId = req.user.id;
-      const hero = await SuperheroesService.createSuperhero(userId, req.body);
-      res.status(201).json(hero);
+      const heroData = req.body;
+
+      const newHero = await SuperheroesService.createSuperhero(
+        userId,
+        heroData,
+      );
+
+      // Повертаємо 201 і сам створений об’єкт з id
+      res.status(201).json(newHero);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      if (err.message === 'A superhero with this nickname already exists') {
+        return res.status(400).json({ error: err.message });
+      }
+
+      console.error(err);
+      res
+        .status(500)
+        .json({ error: 'An error occurred while creating a superhero.' });
     }
   }
 
