@@ -9,7 +9,7 @@ let superheroId;
 const JWT_SECRET = process.env.JWT_SECRET || 'test_secret';
 
 beforeAll(async () => {
-  await db.sequelize.sync({ force: true }); // очищаємо БД
+  await db.sequelize.sync({ force: true });
   const [user] = await db.Users.findOrCreate({
     where: { email: 'e2e@example.com' },
     defaults: { fname: 'E2E', sname: 'Tester', password: '123456' },
@@ -26,7 +26,6 @@ afterAll(async () => {
 
 describe('E2E Superheroes Workflow', () => {
   test('Full workflow: create, favorite, update, delete superhero', async () => {
-    // 1. Створюємо супергероя
     const createRes = await request(app)
       .post('/superheroes')
       .set('Authorization', `Bearer ${testToken}`)
@@ -40,7 +39,6 @@ describe('E2E Superheroes Workflow', () => {
     expect(createRes.status).toBe(201);
     superheroId = createRes.body.id;
 
-    // 2. Додаємо у фаворити
     const favRes = await request(app)
       .post('/users/favorites')
       .set('Authorization', `Bearer ${testToken}`)
@@ -48,7 +46,6 @@ describe('E2E Superheroes Workflow', () => {
     expect(favRes.status).toBe(201);
     expect(favRes.body.created).toBe(true);
 
-    // 3. Оновлюємо супергероя
     const updateRes = await request(app)
       .put(`/superheroes/${superheroId}`)
       .set('Authorization', `Bearer ${testToken}`)
@@ -56,7 +53,6 @@ describe('E2E Superheroes Workflow', () => {
     expect(updateRes.status).toBe(200);
     expect(updateRes.body.nickname).toBe('IronManX');
 
-    // 4. Видаляємо супергероя
     const deleteRes = await request(app)
       .delete(`/superheroes/${superheroId}`)
       .set('Authorization', `Bearer ${testToken}`);

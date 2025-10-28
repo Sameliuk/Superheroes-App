@@ -1,156 +1,151 @@
 import { jest } from '@jest/globals';
-import SuperheroesController from '../../controllers/SuperheroController.js';
-import SuperheroesService from '../../services/SuperheroService.js';
 
-// Мокаємо всі методи сервісу
-SuperheroesService.getAllSuperheroes = jest.fn();
-SuperheroesService.getSingleSuperhero = jest.fn();
-SuperheroesService.createSuperhero = jest.fn();
-SuperheroesService.updateSuperhero = jest.fn();
-SuperheroesService.deleteSuperhero = jest.fn();
+const mockFindAll = jest.fn();
+const mockCount = jest.fn();
+const mockFindOne = jest.fn();
+const mockFindByPk = jest.fn();
+const mockCreate = jest.fn();
+const mockBulkCreate = jest.fn();
+const mockDestroy = jest.fn();
 
-describe('SuperheroesController', () => {
-  let req, res;
+jest.unstable_mockModule('../../models/index.js', () => ({
+  __esModule: true,
+  default: {
+    sequelize: { where: jest.fn(), fn: jest.fn(), col: jest.fn() },
+    Superheroes: {
+      findAll: mockFindAll,
+      count: mockCount,
+      findOne: mockFindOne,
+      findByPk: mockFindByPk,
+      create: mockCreate,
+    },
+    Images: {
+      bulkCreate: mockBulkCreate,
+      destroy: mockDestroy,
+    },
+  },
+}));
 
-  beforeEach(() => {
-    // Створюємо мок об'єкти req та res
-    req = { query: { mine: 'true' }, params: {}, body: {}, user: { id: 1 } };
-    res = {
-      json: jest.fn(),
-      status: jest.fn().mockReturnThis(), // важливо для res.status(...).json(...)
-    };
+const { default: SuperheroesService } = await import(
+  '../../services/SuperheroService.js'
+);
 
-    // Очищаємо попередні виклики моків
-    jest.clearAllMocks();
-  });
+describe('SuperheroesService', () => {
+  afterEach(() => jest.clearAllMocks());
 
-  test('getAllSuperheroes - success', async () => {
-    const mockData = {
-      page: 1,
-      totalPages: 1,
-      data: [{ id: 1, nickname: 'Batman' }],
-    };
-    SuperheroesService.getAllSuperheroes.mockResolvedValue(mockData);
+  describe('getAllSuperheroes', () => {
+    it('повертає героїв з пагінацією', async () => {
+      mockFindAll.mockResolvedValue([{ id: 1, nickname: 'Batman' }]);
+      mockCount.mockResolvedValue(10);
 
-    await SuperheroesController.getAllSuperheroes(req, res);
+      const result = await SuperheroesService.getAllSuperheroes(1, 5);
 
-    expect(SuperheroesService.getAllSuperheroes).toHaveBeenCalledWith(
-      1, // page
-      5, // limit
-      1, // userId з req.user.id
-      '', // searchQuery
-    );
-    expect(res.json).toHaveBeenCalledWith(mockData);
-  });
-
-  test('getSingleSuperhero - not found', async () => {
-    req.params.superheroId = 999;
-    SuperheroesService.getSingleSuperhero.mockResolvedValue(null);
-
-    await SuperheroesController.getSingleSuperhero(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Superhero not found' });
-  });
-
-  test('createSuperhero - success', async () => {
-    const hero = { id: 2, nickname: 'Iron Man' };
-    SuperheroesService.createSuperhero.mockResolvedValue(hero);
-
-    await SuperheroesController.createSuperhero(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith(hero);
-  });
-
-  test('updateSuperhero - not found', async () => {
-    req.params.superheroId = 3;
-    SuperheroesService.updateSuperhero.mockResolvedValue(null);
-
-    await SuperheroesController.updateSuperhero(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({
-      error: 'Superhero not found or not yours',
+      expect(mockFindAll).toHaveBeenCalled();
+      expect(result.totalPages).toBe(2);
+      expect(result.data[0].nickname).toBe('Batman');
     });
   });
 
-  test('deleteSuperhero - not found', async () => {
-    req.params.superheroId = 3;
-    SuperheroesService.deleteSuperhero.mockResolvedValue(false);
+  describe('createSuperhero', () => {
+    it('створює нового героя, якщо такого ще немає', async () => {
+      mockFindOne.mockResolvedValue(null);
+      mockCreate.mockResolvedValue({ id: 1 });
+      mockBulkCreate.mockResolvedValue([]);
+      mockFindByPk.mockResolvedValue({
+        id: 1,
+        nickname: 'Spider Man',
+        real_name: 'Peter Parker',
+        images: [{ id: 1, url: 'img1' }],
+      });
 
-    await SuperheroesController.deleteSuperhero(req, res);
+      const heroData = {
+        nickname: 'Spider Man',
+        real_name: 'Peter Parker',
+        origin_description: 'Bitten by a radioactive spider',
+        superpowers: 'Agility, web-slinging',
+        catch_phrase: 'With great power...',
+        images: ['img1'],
+      };
 
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Superhero not found' });
-  });
+      const result = await SuperheroesService.createSuperhero(1, heroData);
 
-  test('updateSuperhero - success', async () => {
-    req.params.superheroId = 1;
-    req.body = { nickname: 'Dark Knight', catch_phrase: 'I am the night' };
-    const updatedHero = {
-      id: 1,
-      nickname: 'Dark Knight',
-      catch_phrase: 'I am the night',
-    };
+      expect(mockFindOne).toHaveBeenCalled();
+      expect(mockCreate).toHaveBeenCalled();
+      expect(mockBulkCreate).toHaveBeenCalledWith([
+        { superhero_id: 1, url: 'img1' },
+      ]);
+      expect(result.nickname).toBe('Spider Man');
+    });
 
-    SuperheroesService.updateSuperhero.mockResolvedValue(updatedHero);
-
-    await SuperheroesController.updateSuperhero(req, res);
-
-    expect(SuperheroesService.updateSuperhero).toHaveBeenCalledWith(
-      1, // superheroId
-      1,
-      req.body, // дані для оновлення
-    );
-    expect(res.json).toHaveBeenCalledWith(updatedHero);
-  });
-
-  test('deleteSuperhero - success', async () => {
-    req.params.superheroId = 1;
-    SuperheroesService.deleteSuperhero.mockResolvedValue(true);
-
-    await SuperheroesController.deleteSuperhero(req, res);
-
-    expect(SuperheroesService.deleteSuperhero).toHaveBeenCalledWith(
-      1, // superheroId
-      req.user.id,
-    );
-    expect(res.json).toHaveBeenCalledWith({
-      message: 'Superhero deleted',
+    it('викидає помилку, якщо герой уже існує', async () => {
+      mockFindOne.mockResolvedValue({ id: 10 });
+      await expect(
+        SuperheroesService.createSuperhero(1, { nickname: 'Spider Man' }),
+      ).rejects.toThrow('A superhero with this nickname already exists');
     });
   });
 
-  test('getSingleSuperhero - success', async () => {
-    req.params.superheroId = 1;
-    const mockHero = { id: 1, nickname: 'Batman' };
-    SuperheroesService.getSingleSuperhero.mockResolvedValue(mockHero);
+  describe('getSingleSuperhero', () => {
+    it('повертає героя за ID', async () => {
+      const hero = { id: 2, nickname: 'Iron Man' };
+      mockFindByPk.mockResolvedValue(hero);
 
-    await SuperheroesController.getSingleSuperhero(req, res);
+      const result = await SuperheroesService.getSingleSuperhero(2);
 
-    expect(SuperheroesService.getSingleSuperhero).toHaveBeenCalledWith(1);
-    expect(res.json).toHaveBeenCalledWith(mockHero);
+      expect(mockFindByPk).toHaveBeenCalledWith(2, expect.any(Object));
+      expect(result).toEqual(hero);
+    });
   });
 
-  test('getAllSuperheroes - with search query', async () => {
-    req.query = { page: '1', limit: '5', mine: 'true', name: 'batman' }; // <-- mine додано
-    req.user = { id: 1 };
+  describe('updateSuperhero', () => {
+    it('оновлює героя, додає та видаляє зображення', async () => {
+      const mockHero = { id: 1, update: jest.fn() };
+      mockFindOne.mockResolvedValueOnce(mockHero);
+      mockDestroy.mockResolvedValue();
+      mockBulkCreate.mockResolvedValue();
+      mockFindOne.mockResolvedValueOnce({
+        id: 1,
+        nickname: 'Updated Hero',
+        images: [{ id: 10, url: 'new1' }],
+      });
 
-    const mockData = {
-      page: 1,
-      totalPages: 1,
-      data: [{ id: 1, nickname: 'Batman' }],
-    };
-    SuperheroesService.getAllSuperheroes.mockResolvedValue(mockData);
+      const data = {
+        nickname: 'Updated Hero',
+        newImages: ['new1'],
+        removeImageIds: [5],
+      };
+      const result = await SuperheroesService.updateSuperhero(1, 1, data);
 
-    await SuperheroesController.getAllSuperheroes(req, res);
+      expect(mockHero.update).toHaveBeenCalled();
+      expect(mockDestroy).toHaveBeenCalledWith({
+        where: { id: [5], superhero_id: 1 },
+      });
+      expect(mockBulkCreate).toHaveBeenCalledWith([
+        { superhero_id: 1, url: 'new1' },
+      ]);
+      expect(result.nickname).toBe('Updated Hero');
+    });
 
-    expect(SuperheroesService.getAllSuperheroes).toHaveBeenCalledWith(
-      1, // page
-      5, // limit
-      1, // userId
-      'batman', // name
-    );
-    expect(res.json).toHaveBeenCalledWith(mockData);
+    it('повертає null, якщо герой не знайдений', async () => {
+      mockFindOne.mockResolvedValue(null);
+      const result = await SuperheroesService.updateSuperhero(1, 99, {});
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('deleteSuperhero', () => {
+    it('видаляє героя, якщо знайдений', async () => {
+      const mockHero = { destroy: jest.fn() };
+      mockFindOne.mockResolvedValue(mockHero);
+      const result = await SuperheroesService.deleteSuperhero(1, 2);
+      expect(mockHero.destroy).toHaveBeenCalled();
+      expect(result).toBe(true);
+    });
+
+    it('повертає false, якщо герой не знайдений', async () => {
+      mockFindOne.mockResolvedValue(null);
+      const result = await SuperheroesService.deleteSuperhero(1, 999);
+      expect(result).toBe(false);
+    });
   });
 });

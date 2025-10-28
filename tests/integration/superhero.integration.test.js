@@ -6,12 +6,10 @@ let token;
 let superheroId;
 
 beforeAll(async () => {
-  // Повне пересоздання бази
   await db.sequelize.sync({ force: true });
 });
 
 afterAll(async () => {
-  // Очищення даних і закриття з’єднання
   await db.Favorites.destroy({ where: {} });
   await db.Superheroes.destroy({ where: {} });
   await db.Users.destroy({ where: {} });
