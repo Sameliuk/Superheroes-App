@@ -23,7 +23,6 @@ End-to-End (E2E)
 <img width="968" height="536" alt="image" src="https://github.com/user-attachments/assets/fd5aa22e-c6e8-4c31-8700-5351bf5643a0" />
 <img width="1022" height="638" alt="image" src="https://github.com/user-attachments/assets/fa753bba-b244-44fb-8086-1ce692f0fc54" />
 
-
 ---
 
 ### Оцінка ефективності тестів
