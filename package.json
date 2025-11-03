@@ -10,9 +10,9 @@
     "format": "prettier --check .",
     "build": "echo 'Build successful!'",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:unit": "npm test -- --testPathPattern=tests/unit",
-    "test:e2e": "npm test -- --testPathPattern=tests/e2e",
-    "test:performance": "npm test -- --testPathPattern=tests/performance"
+    "test:unit": "npm test -- --testPathPatterns=tests/unit",
+    "test:e2e": "npm test -- --testPathPatterns=tests/e2e",
+    "test:performance": "npm test -- --testPathPatterns=tests/performance"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
