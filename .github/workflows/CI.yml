@@ -10,6 +10,16 @@ on:
     branches: ['master']
 
 jobs:
+  commitlint:
+    name: Commit Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint commits
+        uses: wagoid/commitlint-github-action@v5
+
   lint:
     name: Lint
     runs-on: ubuntu-latest

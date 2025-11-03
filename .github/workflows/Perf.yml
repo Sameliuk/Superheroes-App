@@ -17,8 +17,8 @@ on:
           - performance
 
 jobs:
-  lint:
-    name: Lint
+  performance:
+    name: Performance
     runs-on: ubuntu-latest
 
     strategy:
