@@ -9,7 +9,10 @@
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx --max-warnings=0",
     "format": "prettier --check .",
     "build": "echo 'Build successful!'",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:unit": "npm test -- --testPathPattern=tests/unit",
+    "test:e2e": "npm test -- --testPathPattern=tests/e2e",
+    "test:performance": "npm test -- --testPathPattern=tests/performance"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
