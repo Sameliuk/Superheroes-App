@@ -27,6 +27,7 @@ app.use(
     origin: [
       'http://localhost:5173',
       'https://puppyish-renay-tenaciously.ngrok-free.dev',
+      'https://superheroes-app-1.onrender.com/'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
@@ -39,7 +40,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // або true на продакшн з HTTPS
+    cookie: { secure: false },
   }),
 );
 
