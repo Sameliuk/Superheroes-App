@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:15
+    container_name: superheroes_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    image: asameliuk/superheroes-backend:latest
+    container_name: superheroes_app
+    restart: always
+    env_file: .env
+    depends_on:
+      - db
+    ports:
+      - '3000:3000'
+    command: >
+      sh -c "npx sequelize-cli db:migrate && npm start"
+    volumes:
+      - .:/usr/src/app
+
+volumes:
+  pgdata:
