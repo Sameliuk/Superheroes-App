@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "120306",
+    "database": "superhero_test_db",
+    "host": "db",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "120306",
+    "database": "superhero_test_db",
+    "host": "db",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "120306",
+    "database": "superhero_test_db",
+    "host": "db",
+    "dialect": "postgres"
+  }
+}
