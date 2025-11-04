@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node app.js",
+    "start": "node ./bin/www",
     "prepare": "husky install",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx --max-warnings=0",
     "format": "prettier --check .",
