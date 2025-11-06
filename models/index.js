@@ -7,16 +7,21 @@ import FavoritesModel from './Favorites.js';
 
 dotenv.config();
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    dialect: process.env.DB_DIALECT || 'postgres',
-    host: process.env.DB_HOST || 'localhost',
-    logging: false,
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  logging: console.log,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
   },
-);
+});
+
+sequelize
+  .authenticate()
+  .then(() => console.log('Connected!'))
+  .catch((err) => console.error('Conection error:', err));
 
 const Users = UsersModel(sequelize);
 const Superheroes = SuperheroesModel(sequelize);
@@ -72,7 +77,11 @@ try {
   await sequelize.authenticate();
   console.log('Database connection established successfully.');
 } catch (error) {
-  console.error('Unable to connect to the database:', error);
+  console.error('Unable to connect to the database:');
+  console.error('Message:', error);
+  console.error('Host:', process.env.DB_HOST);
+  console.error('User:', process.env.DB_USER);
+  console.error('DB:', process.env.DB_NAME);
 }
 
 export default db;
