@@ -3,16 +3,15 @@ import { sleep, check } from 'k6';
 
 export let options = {
   stages: [
-    { duration: '30s', target: 10 }, // розігрів
-    { duration: '1m', target: 20 }, // основне навантаження
-    { duration: '30s', target: 0 }, // спад
+    { duration: '30s', target: 10 },
+    { duration: '1m', target: 20 },
+    { duration: '30s', target: 0 },
   ],
 };
 
 const BASE = 'http://localhost:3000';
 
 export default function () {
-  // 1. Створюємо унікального користувача
   const randomId = Date.now() + Math.floor(Math.random() * 1000);
   const signUpPayload = JSON.stringify({
     fname: 'Test',
@@ -38,7 +37,6 @@ export default function () {
     },
   };
 
-  // 2. Створюємо героя
   const heroPayload = JSON.stringify({
     nickname: 'SpiderMan' + randomId,
     real_name: 'Peter Parker',
@@ -60,7 +58,6 @@ export default function () {
 
   const heroId = createHeroRes.json('id');
 
-  // 3. Оновлюємо героя
   const updatePayload = JSON.stringify({ catch_phrase: 'Updated phrase' });
   const updateRes = http.put(
     `${BASE}/superheroes/${heroId}`,
@@ -72,7 +69,6 @@ export default function () {
     'hero updated': (r) => r.status === 200,
   });
 
-  // 4. Додаємо у фаворити
   const addFavRes = http.post(
     `${BASE}/users/favorites`,
     JSON.stringify({ superheroId: heroId }),
@@ -83,7 +79,6 @@ export default function () {
     'added to favorites': (r) => r.status === 201,
   });
 
-  // 5. Видаляємо з фаворитів
   const removeFavRes = http.del(
     `${BASE}/users/favorites/${heroId}`,
     null,
@@ -94,14 +89,12 @@ export default function () {
     'removed from favorites': (r) => r.status === 200,
   });
 
-  // 7. Отримуємо всіх героїв
   const heroesRes = http.get(`${BASE}/superheroes`, authHeaders);
 
   check(heroesRes, {
     'get superheroes': (r) => r.status === 200,
   });
 
-  // 6. Видаляємо героя
   const deleteHeroRes = http.del(
     `${BASE}/superheroes/${heroId}`,
     null,
