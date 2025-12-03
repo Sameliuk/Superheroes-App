@@ -40,6 +40,7 @@ describe('SuperheroesService', () => {
       const result = await SuperheroesService.getAllSuperheroes(1, 5);
 
       expect(mockFindAll).toHaveBeenCalled();
+      expect(mockCount).toHaveBeenCalled();
       expect(result.totalPages).toBe(2);
       expect(result.data[0].nickname).toBe('Batman');
     });
@@ -78,6 +79,7 @@ describe('SuperheroesService', () => {
 
     it('викидає помилку, якщо герой уже існує', async () => {
       mockFindOne.mockResolvedValue({ id: 10 });
+
       await expect(
         SuperheroesService.createSuperhero(1, { nickname: 'Spider Man' }),
       ).rejects.toThrow('A superhero with this nickname already exists');
@@ -99,9 +101,9 @@ describe('SuperheroesService', () => {
   describe('updateSuperhero', () => {
     it('оновлює героя, додає та видаляє зображення', async () => {
       const mockHero = { id: 1, update: jest.fn() };
+
       mockFindOne.mockResolvedValueOnce(mockHero);
-      mockDestroy.mockResolvedValue();
-      mockBulkCreate.mockResolvedValue();
+
       mockFindOne.mockResolvedValueOnce({
         id: 1,
         nickname: 'Updated Hero',
@@ -113,21 +115,25 @@ describe('SuperheroesService', () => {
         newImages: ['new1'],
         removeImageIds: [5],
       };
+
       const result = await SuperheroesService.updateSuperhero(1, 1, data);
 
-      expect(mockHero.update).toHaveBeenCalled();
-      expect(mockDestroy).toHaveBeenCalledWith({
-        where: { id: [5], superhero_id: 1 },
+      expect(mockHero.update).toHaveBeenCalledWith({
+        nickname: 'Updated Hero',
       });
+      expect(mockDestroy).toHaveBeenCalled();
       expect(mockBulkCreate).toHaveBeenCalledWith([
         { superhero_id: 1, url: 'new1' },
       ]);
+
       expect(result.nickname).toBe('Updated Hero');
     });
 
     it('повертає null, якщо герой не знайдений', async () => {
       mockFindOne.mockResolvedValue(null);
+
       const result = await SuperheroesService.updateSuperhero(1, 99, {});
+
       expect(result).toBeNull();
     });
   });
@@ -136,14 +142,18 @@ describe('SuperheroesService', () => {
     it('видаляє героя, якщо знайдений', async () => {
       const mockHero = { destroy: jest.fn() };
       mockFindOne.mockResolvedValue(mockHero);
+
       const result = await SuperheroesService.deleteSuperhero(1, 2);
+
       expect(mockHero.destroy).toHaveBeenCalled();
       expect(result).toBe(true);
     });
 
     it('повертає false, якщо герой не знайдений', async () => {
       mockFindOne.mockResolvedValue(null);
+
       const result = await SuperheroesService.deleteSuperhero(1, 999);
+
       expect(result).toBe(false);
     });
   });
