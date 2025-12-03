@@ -31,7 +31,8 @@
     "pidusage": "^4.0.1",
     "postgres": "^3.4.7",
     "sequelize": "^6.37.7",
-    "sequelize-cli": "^6.6.3"
+    "sequelize-cli": "^6.6.3",
+    "superheroes-service-lib": "git+https://github.com/Sameliuk/Superheroes-service-lib.git"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
