@@ -26,9 +26,8 @@ jest.unstable_mockModule('../../models/index.js', () => ({
   },
 }));
 
-const { default: SuperheroesService } = await import(
-  '../../services/SuperheroService.js'
-);
+const { default: SuperheroesService } =
+  await import('../../services/SuperheroService.js');
 
 describe('SuperheroesService', () => {
   afterEach(() => jest.clearAllMocks());
